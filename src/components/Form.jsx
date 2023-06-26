@@ -158,7 +158,7 @@ function Form({ patients, setPatients }) {
           </div>
           <div>
             <button
-              className={`flex justify-center items-center gap-2 bg-accent w-full font-bold text-white rounded py-2 px-4 focus:outline-none focus:shadow-outline hover:bg-accent-dark transition-all duration-200 ${
+              className={`flex justify-center items-center gap-2 bg-accent w-full font-bold text-white rounded py-2 px-4 focus-visible:shadow-md hover:bg-accent-dark transition-all duration-200 ${
                 error && "cursor-not-allowed opacity-30"
               }`}
               type="submit"

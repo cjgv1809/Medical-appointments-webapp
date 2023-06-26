@@ -33,6 +33,22 @@ const Patients = forwardRef(
           <label className="font-light text-base">Sintomas</label>
           <p className="text-xl text-gray-700">{symptoms}</p>
         </div>
+
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            className="border-accent border hover:bg-accent-dark transition-all duration-200 w-full py-2 px-4 text-accent hover:text-white font-bold rounded focus-visible:shadow-md"
+          >
+            Eliminar
+          </button>
+
+          <button
+            type="button"
+            className="bg-accent hover:bg-accent-dark transition-all duration-200 w-full py-2 px-4 text-white font-bold rounded focus-visible:shadow-md"
+          >
+            Editar
+          </button>
+        </div>
       </div>
     );
   }
