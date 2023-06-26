@@ -1,6 +1,71 @@
+import { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import Alert from "./Alert";
 
-function Form() {
+function Form({ patients, setPatients }) {
+  const [form, setForm] = useState({
+    name: "",
+    owner: "",
+    email: "",
+    date: "",
+    symptoms: "",
+  });
+
+  const [error, setError] = useState(false);
+
+  const generateId = () => {
+    const random = Math.random().toString(36).substring(2);
+    const date = Date.now().toString(36);
+
+    return `${random}${date}`;
+  };
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.id]: e.target.value,
+    });
+
+    // Validate form fields
+    const values = Object.values(form);
+
+    if (values.every((value) => value.trim() !== "")) {
+      setError(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate form fields
+    const values = Object.values(form);
+
+    if (values.some((value) => value.trim() === "")) {
+      setError(true);
+    } else {
+      setError(false);
+
+      const patientObject = {
+        ...form,
+        id: generateId(),
+      };
+
+      // Add patient to patients state
+      setPatients([...patients, patientObject]);
+
+      // Reset form
+      setForm({
+        name: "",
+        owner: "",
+        email: "",
+        date: "",
+        symptoms: "",
+      });
+    }
+  };
+
+  const { name, owner, email, date, symptoms } = form;
+
   return (
     <div className="w-full md:w-2/5 pt-10">
       <h2 className="text-3xl text-center font-semibold">
@@ -11,10 +76,11 @@ function Form() {
       </p>
 
       <div className="bg-secondary p-6 rounded-md shadow-md">
-        <form>
+        <form onSubmit={handleSubmit}>
+          {error && <Alert message="Todos los campos son obligatorios" />}
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-700 text-sm font-bold mb-2 after:content-['(Requerido)'] after:text-gray-400 after:font-normal after:ml-1"
               htmlFor="name"
             >
               Nombre Mascota
@@ -24,11 +90,13 @@ function Form() {
               id="name"
               type="text"
               placeholder="Nombre Mascota"
+              value={name}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-700 text-sm font-bold mb-2 after:content-['(Requerido)'] after:text-gray-400 after:font-normal after:ml-1"
               htmlFor="owner"
             >
               Nombre Dueño
@@ -38,11 +106,13 @@ function Form() {
               id="owner"
               type="text"
               placeholder="Nombre Dueño de la Mascota"
+              value={owner}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-700 text-sm font-bold mb-2 after:content-['(Requerido)'] after:text-gray-400 after:font-normal after:ml-1"
               htmlFor="email"
             >
               Email
@@ -52,11 +122,13 @@ function Form() {
               id="email"
               type="email"
               placeholder="Email Dueño de la Mascota"
+              value={email}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-700 text-sm font-bold mb-2 after:content-['(Requerido)'] after:text-gray-400 after:font-normal after:ml-1"
               htmlFor="date"
             >
               Fecha
@@ -65,11 +137,13 @@ function Form() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="date"
               type="date"
+              value={date}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-700 text-sm font-bold mb-2 after:content-['(Requerido)'] after:text-gray-400 after:font-normal after:ml-1"
               htmlFor="symptoms"
             >
               Sintomas
@@ -78,14 +152,20 @@ function Form() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-40 resize-none"
               id="symptoms"
               placeholder="Describe los sintomas"
+              value={symptoms}
+              onChange={handleChange}
             ></textarea>
           </div>
-          <div className="flex justify-end">
+          <div>
             <button
-              className="flex justify-center items-center gap-2 bg-accent w-full sm:w-auto font-bold text-white rounded py-2 px-4 focus:outline-none focus:shadow-outline hover:bg-accent-dark transition-all duration-200"
+              className={`flex justify-center items-center gap-2 bg-accent w-full font-bold text-white rounded py-2 px-4 focus:outline-none focus:shadow-outline hover:bg-accent-dark transition-all duration-200 ${
+                error && "cursor-not-allowed opacity-30"
+              }`}
               type="submit"
+              disabled={error}
             >
-              <PlusIcon className="h-4 w-4" /> Agregar
+              <PlusIcon className="h-4 w-4" />
+              Agregar
             </button>
           </div>
         </form>

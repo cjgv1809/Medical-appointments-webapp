@@ -1,6 +1,9 @@
 import Patients from "./Patients";
+import FlipMove from "react-flip-move";
 
-function PatientsList() {
+function PatientsList({ patients }) {
+  console.log("PATIENTS", patients);
+
   return (
     <div className="w-full md:w-3/5 pt-10">
       <h2 className="text-3xl text-center font-semibold">
@@ -11,13 +14,17 @@ function PatientsList() {
       </p>
 
       <div className="md:h-screen scrollbar-hide overflow-y-auto space-y-5">
-        <Patients />
-        <Patients />
-        <Patients />
-        <Patients />
-        <Patients />
-        <Patients />
-        <Patients />
+        {patients.length === 0 && (
+          <p className="text-center text-xl font-light">
+            No hay pacientes registrados
+          </p>
+        )}
+
+        <FlipMove>
+          {patients.map((patient) => (
+            <Patients key={patient.id} patient={patient} />
+          ))}
+        </FlipMove>
       </div>
     </div>
   );
