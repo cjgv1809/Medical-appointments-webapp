@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import Alert from "./Alert";
 
-function Form({ patients, setPatients }) {
+function Form({ patients, setPatients, patient, setPatient }) {
   const [form, setForm] = useState({
     name: "",
     owner: "",
@@ -12,6 +12,18 @@ function Form({ patients, setPatients }) {
   });
 
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(patient).length > 0) {
+      setForm({
+        name: patient.name,
+        owner: patient.owner,
+        email: patient.email,
+        date: patient.date,
+        symptoms: patient.symptoms,
+      });
+    }
+  }, [patient]);
 
   const generateId = () => {
     const random = Math.random().toString(36).substring(2);
@@ -47,11 +59,25 @@ function Form({ patients, setPatients }) {
 
       const patientObject = {
         ...form,
-        id: generateId(),
       };
 
-      // Add patient to patients state
-      setPatients([...patients, patientObject]);
+      if (patient.id) {
+        // Edit patient and update patients state with new patient
+        patientObject.id = patient.id;
+        const patientsArray = patients.map((patientState) => {
+          if (patientState.id === patient.id) {
+            return patientObject;
+          } else {
+            return patientState;
+          }
+        });
+        setPatients(patientsArray);
+        setPatient({});
+      } else {
+        // Add patient to patients state and create id
+        patientObject.id = generateId();
+        setPatients([...patients, patientObject]);
+      }
 
       // Reset form
       setForm({
@@ -158,14 +184,14 @@ function Form({ patients, setPatients }) {
           </div>
           <div>
             <button
-              className={`flex justify-center items-center gap-2 bg-accent w-full font-bold text-white rounded py-2 px-4 focus-visible:shadow-md hover:bg-accent-dark transition-all duration-200 ${
+              className={`flex justify-center items-center gap-2 bg-accent w-full font-bold text-white tracking-wider rounded py-2 px-4 focus-visible:shadow-md hover:bg-accent-dark transition-all duration-200 ${
                 error && "cursor-not-allowed opacity-30"
               }`}
               type="submit"
               disabled={error}
             >
               <PlusIcon className="h-4 w-4" />
-              Agregar
+              {patient.id ? "Editar" : "Agregar"}
             </button>
           </div>
         </form>

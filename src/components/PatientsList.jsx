@@ -1,9 +1,7 @@
 import Patients from "./Patients";
 import FlipMove from "react-flip-move";
 
-function PatientsList({ patients }) {
-  console.log("PATIENTS", patients);
-
+function PatientsList({ patients, setPatient, deletePatient }) {
   return (
     <div className="w-full md:w-3/5 pt-10">
       <h2 className="text-3xl text-center font-semibold">
@@ -20,11 +18,16 @@ function PatientsList({ patients }) {
           </p>
         )}
 
-        <FlipMove>
-          {patients.map((patient) => (
-            <Patients key={patient.id} patient={patient} />
-          ))}
-        </FlipMove>
+        {/* <FlipMove> */}
+        {patients.map((patient) => (
+          <Patients
+            key={patient.id}
+            patient={patient}
+            setPatient={setPatient}
+            deletePatient={deletePatient}
+          />
+        ))}
+        {/* </FlipMove> */}
       </div>
     </div>
   );
