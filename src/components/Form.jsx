@@ -157,7 +157,7 @@ function Form({ patients, setPatients, patient, setPatient }) {
               className="block text-gray-700 text-sm font-bold mb-2 after:content-['(Requerido)'] after:text-gray-400 after:font-normal after:ml-1"
               htmlFor="date"
             >
-              Fecha
+              Fecha de alta
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
